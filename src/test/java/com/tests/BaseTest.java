@@ -1,8 +1,11 @@
 package com.tests;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -43,6 +46,51 @@ public class BaseTest {
     @AfterTest
     public void quitDriver(){
         this.driver.quit();
+    }
+    
+    public boolean waitforpage(WebDriver driver) {
+    	WebDriverWait wait = new WebDriverWait(driver, 30);
+    	JavascriptExecutor js = (JavascriptExecutor)(driver);
+    	// wait for jQuery to load
+    	ExpectedCondition<Boolean> jquery = new ExpectedCondition<Boolean>() {
+
+			@Override
+			public Boolean apply(WebDriver input) {
+				try {
+				return ((Long)(js).executeScript("return jQuery.active")==0);
+				}catch(Exception e) {
+					return true;
+				}
+			}
+		};
+		// wait for Javascript to load
+		ExpectedCondition<Boolean> jsload = new ExpectedCondition<Boolean>() {
+
+			@Override
+			public Boolean apply(WebDriver input) {
+				
+				return (js).executeScript("return document.readystate").toString().equals("complete");
+			}
+			
+		};
+		return wait.until(jquery) && wait.until(jsload);
+    			
+    }
+    
+    public void WaitForPageLoad(WebDriver driver) {
+    	long timeouts =25000; //Time outs 25 seconds
+    	
+    	for(long i=1000;i<timeouts;i=i+1000) {
+    		try {
+    			Thread.sleep(i);
+    			if(waitforpage(driver)) {
+    				break;
+    			}
+    		}catch(InterruptedException e) {
+    			String k =e.getMessage();
+    			System.out.println(k);
+    		}
+    	}
     }
 
 
