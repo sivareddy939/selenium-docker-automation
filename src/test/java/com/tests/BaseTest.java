@@ -92,6 +92,19 @@ public class BaseTest {
     		}
     	}
     }
+    public void WaitForPageLoad1(WebDriver driver) {
+    	long timeouts =25000; //Time outs 25 seconds
+    	
+    	for(long i=1000;i<timeouts;i=i+1000) {
+    		try {
+    			Thread.sleep(i);
+    			
+    		}catch(InterruptedException e) {
+    			String k =e.getMessage();
+    			System.out.println(k);
+    		}
+    	}
+    }
 
 
 
