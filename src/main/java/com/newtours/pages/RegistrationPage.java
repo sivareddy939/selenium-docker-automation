@@ -51,7 +51,9 @@ public class RegistrationPage {
         this.passwordTxt.sendKeys(password);
         this.confirmPasswordTxt.sendKeys(password);
     }
-
+/*
+Click on submission buton
+*/
     public void submit(){
         this.submitBtn.click();
     }
